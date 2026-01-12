@@ -7,91 +7,84 @@
 
 <style>
 :root{
-  --primary:#2563eb;
-  --bg:#f1f5f9;
+  --sky:#e0f2fe;
+  --orange:#f97316;
+  --dark:#0f172a;
   --card:#ffffff;
-  --text:#0f172a;
-  --muted:#64748b;
+  --muted:#475569;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+  background:var(--sky);
+  color:var(--dark);
 }
 
 /* HEADER */
 header{
-  background:linear-gradient(135deg,#1e40af,#2563eb);
-  color:#fff;
+  background:linear-gradient(135deg,#bae6fd,#7dd3fc);
+  border-bottom:3px solid var(--orange);
 }
 header .wrap{
-  max-width:1000px;
+  max-width:1100px;
   margin:auto;
   padding:18px;
 }
-header h2{margin:0 0 6px}
+header h2{margin:0;color:#0c4a6e}
 header select{
   padding:10px;
   border-radius:8px;
-  border:none;
-  font-size:15px;
+  border:1px solid #cbd5e1;
+  margin-right:8px;
 }
 
 /* LAYOUT */
-.wrap{max-width:1000px;margin:auto;padding:16px}
+.wrap{max-width:1100px;margin:auto;padding:16px}
 .card{
   background:var(--card);
-  border-radius:14px;
-  padding:18px;
-  margin-top:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
+  border-radius:16px;
+  padding:20px;
+  margin-top:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,.1);
 }
 .hidden{display:none}
 
 /* FORM */
-label{
-  display:block;
-  font-weight:600;
-  margin-top:12px;
-}
-input,select{
+label{display:block;font-weight:600;margin-top:12px}
+input,select,textarea{
   width:100%;
   padding:11px;
   margin-top:6px;
   border-radius:10px;
-  border:1px solid #cbd5f5;
+  border:1px solid #cbd5e1;
   font-size:15px;
 }
+textarea{resize:vertical}
 
 /* BUTTON */
 button{
-  margin-top:16px;
-  padding:12px 18px;
+  margin-top:18px;
+  padding:13px 22px;
   border:none;
-  border-radius:10px;
-  background:var(--primary);
+  border-radius:12px;
+  background:var(--orange);
   color:#fff;
-  font-size:15px;
+  font-size:16px;
+  font-weight:600;
   cursor:pointer;
 }
-button:hover{background:#1d4ed8}
+button:hover{background:#ea580c}
 
 /* LIST */
-.list{margin-top:16px}
 .item{
   background:#f8fafc;
-  border:1px dashed #cbd5e1;
-  border-radius:10px;
+  border:1px dashed #94a3b8;
+  border-radius:12px;
   padding:12px;
-  margin-bottom:10px;
-}
-.muted{
-  color:var(--muted);
-  font-size:13px;
   margin-top:10px;
 }
+.muted{color:var(--muted);font-size:13px;margin-top:10px}
 </style>
 </head>
 
@@ -99,238 +92,164 @@ button:hover{background:#1d4ed8}
 
 <header>
   <div class="wrap">
-    <h2>The Vaahan 🚚</h2>
-    <label>Select Role (अपना रोल चुनें)</label>
+    <h2 data-key="brand">The Vaahan 🚚</h2>
+
+    <label data-key="roleLabel">Select Role</label>
     <select id="roleSelect">
-      <option value="shipper">Shipper (लोड देने वाला)</option>
-      <option value="transporter">Transporter (गाड़ी देने वाला)</option>
+      <option value="shipper" data-key="shipper">Shipper</option>
+      <option value="transporter" data-key="transporter">Transporter</option>
     </select>
-    <div class="muted">Clear requirement. Direct connection.</div>
+
+    <select onchange="changeLang(this.value)">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="bn">বাংলা</option>
+    </select>
+
+    <div class="muted" data-key="tagline">Clear requirement. Direct connection.</div>
   </div>
 </header>
 
 <main class="wrap">
 
-<!-- ================= SHIPPER ================= -->
+<!-- SHIPPER -->
 <div id="shipperPage" class="card hidden">
-<h3>📦 Post Load (लोड की जानकारी)</h3>
+<h3 data-key="postLoad">📦 Post Load</h3>
 
-<label>Origin * (सामान कहां से उठेगा)</label>
-<input id="loadOrigin" placeholder="Kolkata, WB">
+<label data-key="origin">Origin</label>
+<input id="loadOrigin">
 
-<label>Destination * (सामान कहां जाएगा)</label>
-<input id="loadDest" placeholder="Durgapur, WB">
+<label data-key="dest">Destination</label>
+<input id="loadDest">
 
-<label>Weight (tons) * (वजन)</label>
-<input id="loadWeight" type="number" step="0.01">
+<label data-key="weight">Weight (tons)</label>
+<input id="loadWeight" type="number">
 
-<label>Budget (₹) (किराया – वैकल्पिक)</label>
-<input id="loadBudget" type="number">
-
-<h4 style="margin-top:20px">Optional Details (वैकल्पिक)</h4>
-
-<label>Pickup Date (गाड़ी कब चाहिए)</label>
-<input id="pickupDate" type="date">
-
-<label>Preferred Vehicle Type (गाड़ी का प्रकार)</label>
-<select id="prefVehicle">
-  <option value="">Any (कोई भी)</option>
-  <option>Bike / Scooter</option>
-  <option>Tata Ace / Chota Hathi</option>
-  <option>Pickup / Bolero</option>
-  <option>LCV / 407 / Dost</option>
-  <option>Mini Truck</option>
-  <option>10T Truck</option>
-  <option>14T Truck</option>
-  <option>17T Truck</option>
-  <option>20T Truck</option>
-  <option>22T Truck</option>
-  <option>Trailer / Multi Axle</option>
-  <option>Container (Closed)</option>
-  <option>Reefer (Cold)</option>
+<label data-key="loadType">Load Type</label>
+<select id="loadType">
+<option>Steel</option><option>FMCG</option><option>Electronics</option>
+<option>Machinery</option><option>Furniture</option><option>Others</option>
 </select>
 
-<label>Preferred Vehicle Size (गाड़ी का साइज)</label>
-<select id="prefSize">
-  <option value="">Any Size</option>
-  <option>6 FT</option>
-  <option>7 FT</option>
-  <option>8 FT</option>
-  <option>9 FT</option>
-  <option>10 FT</option>
-  <option>12 FT</option>
-  <option>14 FT</option>
-  <option>16 FT</option>
-  <option>17 FT</option>
-  <option>19 FT</option>
-  <option>20 FT</option>
-  <option>22 FT</option>
-  <option>32 FT Trailer</option>
-  <option>40 FT Trailer</option>
+<label data-key="payment">Payment Type</label>
+<select id="payment">
+<option>Cash</option><option>Online</option><option>To-Pay</option>
 </select>
 
-<button id="btnPostLoad">Post Load & Get Calls</button>
+<label data-key="contact">Contact Number</label>
+<input id="shipContact">
 
-<div class="muted">
-🟢 Aapki requirement relevant transporters tak share hoti hai.<br>
-🔒 No commission. Direct contact.
+<label data-key="notes">Notes</label>
+<textarea id="shipNotes"></textarea>
+
+<button id="btnPostLoad" data-key="postBtn">Post Load</button>
 </div>
 
-<div id="loadList" class="list"></div>
-</div>
-
-<!-- ================= TRANSPORTER ================= -->
+<!-- TRANSPORTER -->
 <div id="transporterPage" class="card hidden">
-<h3>🚛 Post Vehicle (गाड़ी की जानकारी)</h3>
+<h3 data-key="postVehicle">🚛 Post Vehicle</h3>
 
-<label>Vehicle Type * (गाड़ी का नाम)</label>
-<input id="vehType" placeholder="14T / LCV / Trailer">
+<label data-key="vehType">Vehicle Type</label>
+<input id="vehType">
 
-<label>Capacity (tons) * (क्षमता)</label>
+<label data-key="capacity">Capacity (tons)</label>
 <input id="vehCap" type="number">
 
-<label>Current Location * (अभी कहां है)</label>
-<input id="vehLoc" placeholder="Howrah, WB">
+<label data-key="location">Current Location</label>
+<input id="vehLoc">
 
-<label>Preferred Route (रूट)</label>
-<input id="vehRoute" placeholder="WB – Jharkhand">
+<label data-key="driver">Driver Name</label>
+<input id="driverName">
 
-<h4 style="margin-top:20px">Optional Details (वैकल्पिक)</h4>
+<label data-key="vehNo">Vehicle Number</label>
+<input id="vehNo">
 
-<label>Vehicle Body Type (बॉडी टाइप)</label>
-<select id="vehBody">
-  <option value="">Any</option>
-  <option>Open Body</option>
-  <option>Closed / Container</option>
-  <option>Tarpaulin</option>
-  <option>Reefer</option>
+<label data-key="fuel">Fuel Type</label>
+<select id="fuel">
+<option>Diesel</option><option>CNG</option><option>Electric</option>
 </select>
 
-<label>Vehicle Size (गाड़ी का साइज)</label>
-<select id="vehSize">
-  <option value="">Any Size</option>
-  <option>9 FT</option>
-  <option>10 FT</option>
-  <option>14 FT</option>
-  <option>17 FT</option>
-  <option>20 FT</option>
-  <option>22 FT</option>
-  <option>32 FT Trailer</option>
-  <option>40 FT Trailer</option>
-</select>
+<label data-key="contact">Contact Number</label>
+<input id="vehContact">
 
-<label>Availability (कब available)</label>
-<select id="vehAvail">
-  <option value="">Select</option>
-  <option>Available Now</option>
-  <option>Today</option>
-  <option>Tomorrow</option>
-</select>
-
-<label>Trip Type (ट्रिप टाइप)</label>
-<select id="vehTrip">
-  <option value="">Any</option>
-  <option>One Way</option>
-  <option>Round Trip</option>
-  <option>Return Load</option>
-</select>
-
-<button id="btnPostVehicle">Post Vehicle</button>
-
-<div class="muted">
-📦 Sirf relevant shippers hi contact karenge.
-</div>
-
-<div id="vehicleList" class="list"></div>
+<button id="btnPostVehicle" data-key="postVehBtn">Post Vehicle</button>
 </div>
 
 </main>
 
 <script>
+const WA="918276929832";
+
+/* LANGUAGE */
+const t={
+en:{brand:"The Vaahan 🚚",roleLabel:"Select Role",shipper:"Shipper",transporter:"Transporter",
+tagline:"Clear requirement. Direct connection.",postLoad:"📦 Post Load",
+origin:"Origin",dest:"Destination",weight:"Weight (tons)",loadType:"Load Type",
+payment:"Payment Type",contact:"Contact Number",notes:"Notes",
+postBtn:"Post Load",postVehicle:"🚛 Post Vehicle",vehType:"Vehicle Type",
+capacity:"Capacity (tons)",location:"Current Location",driver:"Driver Name",
+vehNo:"Vehicle Number",fuel:"Fuel Type",postVehBtn:"Post Vehicle"},
+hi:{brand:"द वाहन 🚚",roleLabel:"अपना रोल चुनें",shipper:"लोड देने वाला",
+transporter:"गाड़ी देने वाला",tagline:"सीधी जरूरत। सीधा संपर्क।",
+postLoad:"📦 लोड डालें",origin:"कहां से",dest:"कहां तक",weight:"वजन (टन)",
+loadType:"सामान का प्रकार",payment:"भुगतान तरीका",contact:"संपर्क नंबर",
+notes:"नोट्स",postBtn:"लोड पोस्ट करें",postVehicle:"🚛 गाड़ी डालें",
+vehType:"गाड़ी का प्रकार",capacity:"क्षमता (टन)",location:"अभी कहां है",
+driver:"ड्राइवर का नाम",vehNo:"गाड़ी नंबर",fuel:"ईंधन प्रकार",
+postVehBtn:"गाड़ी पोस्ट करें"},
+bn:{brand:"দ্য বাহান 🚚",roleLabel:"রোল নির্বাচন করুন",shipper:"লোডদাতা",
+transporter:"গাড়িদাতা",tagline:"সরাসরি প্রয়োজন। সরাসরি যোগাযোগ।",
+postLoad:"📦 লোড দিন",origin:"কোথা থেকে",dest:"কোথায়",weight:"ওজন (টন)",
+loadType:"পণ্যের ধরন",payment:"পেমেন্ট ধরন",contact:"যোগাযোগ নম্বর",
+notes:"নোট",postBtn:"লোড পোস্ট করুন",postVehicle:"🚛 গাড়ি দিন",
+vehType:"গাড়ির ধরন",capacity:"ক্ষমতা (টন)",location:"বর্তমান অবস্থান",
+driver:"চালকের নাম",vehNo:"গাড়ি নম্বর",fuel:"জ্বালানি ধরন",
+postVehBtn:"গাড়ি পোস্ট করুন"}
+};
+
+function changeLang(l){
+document.querySelectorAll("[data-key]").forEach(e=>{
+e.innerText=t[l][e.dataset.key];
+});
+}
+
+/* ROLE SWITCH */
 const roleSelect=document.getElementById("roleSelect");
 const shipperPage=document.getElementById("shipperPage");
 const transporterPage=document.getElementById("transporterPage");
-
-let loads=[],vehicles=[];
-const WA="918276929832";
-
 roleSelect.onchange=()=>show(roleSelect.value);
 function show(r){
-  shipperPage.classList.add("hidden");
-  transporterPage.classList.add("hidden");
-  if(r==="shipper")shipperPage.classList.remove("hidden");
-  if(r==="transporter")transporterPage.classList.remove("hidden");
+shipperPage.classList.add("hidden");
+transporterPage.classList.add("hidden");
+if(r==="shipper")shipperPage.classList.remove("hidden");
+if(r==="transporter")transporterPage.classList.remove("hidden");
 }
-
-function wa(m){
-  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(m)}`);
-}
-
-/* SHIPPER */
-btnPostLoad.onclick=()=>{
-  if(!loadOrigin.value||!loadDest.value||!loadWeight.value)
-    return alert("Required details missing");
-
-  let l={
-    o:loadOrigin.value,
-    d:loadDest.value,
-    w:loadWeight.value,
-    b:loadBudget.value,
-    date:pickupDate.value,
-    v:prefVehicle.value,
-    s:prefSize.value
-  };
-  loads.push(l);
-
-  wa(`Load Requirement
-${l.o} → ${l.d}
-Weight: ${l.w}T
-Vehicle: ${l.v||"Any"}
-Size: ${l.s||"Any"}
-Pickup: ${l.date||"-"}
-Budget: ₹${l.b||"-"}`);
-
-  render();
-};
-
-/* TRANSPORTER */
-btnPostVehicle.onclick=()=>{
-  if(!vehType.value||!vehCap.value||!vehLoc.value)
-    return alert("Required details missing");
-
-  let v={
-    t:vehType.value,
-    c:vehCap.value,
-    l:vehLoc.value,
-    r:vehRoute.value,
-    body:vehBody.value,
-    size:vehSize.value,
-    avail:vehAvail.value,
-    trip:vehTrip.value
-  };
-  vehicles.push(v);
-
-  wa(`Vehicle Available
-${v.t} | ${v.c}T
-Location: ${v.l}
-Route: ${v.r||"-"}
-Size: ${v.size||"-"}
-Availability: ${v.avail||"-"}`);
-
-  render();
-};
-
-function render(){
-  loadList.innerHTML=loads.map(l=>
-    `<div class="item">${l.o} → ${l.d} | ${l.w}T</div>`
-  ).join("");
-
-  vehicleList.innerHTML=vehicles.map(v=>
-    `<div class="item">${v.t} | ${v.c}T | ${v.l}</div>`
-  ).join("");
-}
-
 show("shipper");
+
+/* WHATSAPP */
+function wa(m){window.open(`https://wa.me/${WA}?text=${encodeURIComponent(m)}`);}
+
+btnPostLoad.onclick=()=>{
+wa(`LOAD REQUIREMENT
+From: ${loadOrigin.value}
+To: ${loadDest.value}
+Weight: ${loadWeight.value} T
+Type: ${loadType.value}
+Payment: ${payment.value}
+Contact: ${shipContact.value}
+Notes: ${shipNotes.value||"-"}`);
+};
+
+btnPostVehicle.onclick=()=>{
+wa(`VEHICLE AVAILABLE
+Type: ${vehType.value}
+Capacity: ${vehCap.value} T
+Location: ${vehLoc.value}
+Driver: ${driverName.value}
+Vehicle No: ${vehNo.value}
+Fuel: ${fuel.value}
+Contact: ${vehContact.value}`);
+};
 </script>
 
 </body>
